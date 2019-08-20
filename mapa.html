@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+   integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+   crossorigin=""/>
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+  <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+ integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+ crossorigin=""></script>
+    
+ 
+ 
+
+    <style>
+      #mapid { height: 360px; }
+    </style>
+  </head>
+  <body>
+    <div id="mapid"></div>
+    <script src="leaflet.js"></script>
+    <script src="script.js"></script>
+    <script src="Leaflet.AccuratePosition.js"></script>
+    <script>var initialCoordinates = [-22.91, -43.20]; // Rio de Janeiro
+            var initialZoomLevel = 13;
+    
+        
+        // create a map in the "map" div, set the view to a given place and zoom
+        var mymap = L.map('mapid').setView(initialCoordinates, initialZoomLevel);
+        var marker = L.marker([-22.91, -44.09]).addTo(mymap);
+        marker.bindPopup("<b>Aqui será a zona!</b><br>Bora pra zona.").openPopup();
+        var marker = L.marker([-22.917, -44.098]).addTo(mymap);
+        // var map = L.map('map').setView([51.505, -0.09], 13);
+
+        function onAccuratePositionProgress (e) {
+    console.log(e.accuracy);
+    console.log(e.latlng);
+}
+
+function onAccuratePositionFound (e) {
+    console.log(e.accuracy);
+    console.log(e.latlng);
+}
+
+function onAccuratePositionError (e) {
+    console.log(e.message)
+}
+
+mymap.on('accuratepositionprogress', onAccuratePositionProgress);
+mymap.on('accuratepositionfound', onAccuratePositionFound);
+mymap.on('accuratepositionerror', onAccuratePositionError);
+
+mymap.findAccuratePosition({
+    maxWait: 15000, // defaults to 10000
+    desiredAccuracy: 30 // defaults to 20
+}); 
+        
+        // add an OpenStreetMap tile layer
+        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+	attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+	maxZoom: 18,
+	id: 'mapbox.streets',
+	accessToken: 'pk.eyJ1IjoiYmFydXNzYSIsImEiOiJjanppejRjbm8wNG1lM21wMGt1M2VxN21wIn0.amJNyjomSVYouyfsUcYVxg'
+}).addTo(mymap);</script>
+</body>
+</html>
+
